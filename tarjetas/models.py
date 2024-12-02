@@ -60,9 +60,10 @@ class Tarjeta(models.Model):
         ('NEGRO', 'NEGRO'),
     )
     ESTADO_TRASLADO = (
+        ('PENDIENTE', 'PENDIENTE'),
         ('SOLICITADO', 'SOLICITADO'),
         ('GESTIONADO', 'GESTIONADO'),
-        ('SALIDO_PSA', 'SALIDO_PSA'),
+        ('SALIDA_PSA', 'SALIDA_PSA'),
         ('REALIZADO', 'REALIZADO'),
         ('ALTA LUGAR', 'ALTA LUGAR'),
     ) 

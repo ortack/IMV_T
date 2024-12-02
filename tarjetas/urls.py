@@ -9,6 +9,8 @@ urlpatterns = [
     path('roll/', views.roll, name='roll'),
     path('tarjetas_list/', views.tarjetas_list, name='tarjetas_list'),
     path('tarjeta_psa_in/<int:tarjeta_id>/', views.tarjeta_psa_in, name='tarjeta_psa_in'),
+    path('tarjeta_psa_out/<int:tarjeta_id>/', views.tarjeta_psa_out, name='tarjeta_psa_out'),
+    path('estado_traslado/<int:tarjeta_id>/', views.estado_traslado, name='estado_traslado'),
 ]
 
 

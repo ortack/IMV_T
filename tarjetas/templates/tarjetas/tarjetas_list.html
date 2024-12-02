@@ -16,6 +16,8 @@
               <td>Traslado a </td>
               <td>Traslado por</td>
               <td>Estado del traslado</td>
+              <td>PSA</td>
+              <td>Lugar en el PSA</td>
             </tr>
         </thead>
         <tbody>
@@ -39,21 +41,45 @@
                       {% endif %}                   
                   </td>
                   <td>{{tarjeta.patologia}}</td>
-                  <td>{{tarjeta.traslado_a}}</td>
-                  <td>{{tarjeta.traslado_por}}</td>
-                  <td>{{tarjeta.estado_traslado}}</td>
+                  <td>{{tarjeta.traslada_a}}</td>
+                  <td>{{tarjeta.traslada_por}}</td>
+                  {% comment %}<td><a class="nav-link text-info fw-bold" href="/tarjetas/estado_traslado/{{ tarjeta.id }}">{{tarjeta.estado_traslado}}</a></td> {% endcomment %}
+                   <td>{% if tarjeta.estado_traslado == 'GESTIONADO' %}
+                      <a class="nav-link text-green fw-bold" href="/tarjetas/estado_traslado/{{ tarjeta.id }}">{{tarjeta.estado_traslado}}</a>
+                    {% elif tarjeta.estado_traslado == 'SOLICITADO' %}
+                      <a class="nav-link text-yellow fw-bold" href="/tarjetas/estado_traslado/{{ tarjeta.id }}">{{tarjeta.estado_traslado}}</a>
+                    {% elif tarjeta.estado_traslado == 'PENDIENTE' %}
+                      <a class="nav-link text-red fw-bold" href="/tarjetas/estado_traslado/{{ tarjeta.id }}">{{tarjeta.estado_traslado}}</a>
+                    {% else  %}
+                      <a class="nav-link text-blue fw-bold" href="/tarjetas/estado_traslado/{{ tarjeta.id }}">{{tarjeta.estado_traslado}}</a>
+                    {% endif %}
+                </td> 
+                <td>{{tarjeta.psa}}</td>
+                <td>{{tarjeta.pos_psa}}</td>
                 </tr>
                 {% endfor %}
               </tr>
         </tbody>
     </table>
-    <style>
+  <style>
     .table td {
         max-width: 145px; /* Ajusta el valor para el ancho máximo deseado */
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-    </style>
+    .text-green {
+      color: green; /* Cambia el color a verde */
+    }
+    .text-red {
+      color: red; /* Cambia el color a verde */
+    }
+    .text-blue {
+      color: blue; /* Cambia el color a verde */
+    }
+    .text-yellow {
+    color: yellow; /* Cambia el color a verde */
+    }
+  </style>
 
 {% endblock content %}

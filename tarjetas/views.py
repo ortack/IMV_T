@@ -1,7 +1,7 @@
 from .models import Tarjeta,Evento
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
-from .forms import Roll1Form, TarjetaPsaInForm, Roll2Form
+from .forms import Roll1Form, TarjetaPsaInForm, Roll2Form, EstadoTrasladoForm, Roll3Form, TarjetaPsaOutForm
 import csv
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -25,6 +25,7 @@ def roll_1(request):
             tarjeta = form.save(commit=False) 
             tarjeta.evento = evento
             tarjeta.triaje = tarjeta.triaje_ini
+            tarjeta.estado_traslado = "PENDIENTE"
             tarjeta.save()
             form = Roll1Form()
     else:
@@ -55,7 +56,7 @@ def tarjeta_psa_in(request, tarjeta_id):
         if form.is_valid():
             post = form.save()
             post.save()
-            return render(request, 'tarjeta/roll2.html', )
+            return redirect('roll_2', )
     else:
         form = TarjetaPsaInForm(instance=post)
     return render(request, 'tarjetas/tarjeta_psa_in.html', {'form': form})
@@ -63,7 +64,32 @@ def tarjeta_psa_in(request, tarjeta_id):
 
 @login_required(login_url='login')
 def roll_3(request):
-    return None
+    if request.method == "POST":
+        form = Roll3Form(request.POST)
+        if form.is_valid():
+            num_t = form.cleaned_data['num_t']
+            try:
+                tarjeta = Tarjeta.objects.get(num_t=num_t)
+                return redirect('tarjeta_psa_out', tarjeta_id=tarjeta.id)  # Redirige a la vista de edición
+            except Tarjeta.DoesNotExist:
+                form.add_error('num_t', 'Tarjeta no encontrada')
+    else:
+        form = Roll3Form()
+    form = Roll3Form()
+    return render(request, 'tarjetas/roll3.html', {'form': form})
+
+def tarjeta_psa_out(request, tarjeta_id):
+    post = get_object_or_404(Tarjeta,id=tarjeta_id)
+    if request.method == "POST":
+        form = TarjetaPsaOutForm(request.POST.copy(), instance=post)
+        if form.is_valid():
+            post = form.save()
+            post.estado_traslado = 'SALIDA_PSA'
+            post.save()
+            return redirect('roll_3', )
+    else:
+        form = TarjetaPsaOutForm(instance=post)
+    return render(request, 'tarjetas/tarjeta_psa_out.html', {'form': form})
 
 @login_required(login_url='login')
 def roll_4(request):
@@ -77,7 +103,17 @@ def roll(request):
 @login_required(login_url='login')
 def tarjetas_list(request):
     tarjetas = Tarjeta.objects.filter(evento = request.session['evento_id']).order_by('-id')
-    
-    evento_id = request.session['evento_id']
     tarjetas_count = Tarjeta.objects.filter(evento = request.session['evento_id']).count()
     return render(request, 'tarjetas/tarjetas_list.html', {'tarjetas': tarjetas,'tarjetas_count': tarjetas_count})  
+
+def estado_traslado(request, tarjeta_id):
+    post = get_object_or_404(Tarjeta,id=tarjeta_id)
+    if request.method == "POST":
+        form = EstadoTrasladoForm(request.POST.copy(), instance=post)
+        if form.is_valid():
+            post = form.save()
+            post.save()
+            return redirect('tarjetas_list', )
+    else:
+        form = EstadoTrasladoForm(instance=post)
+    return render(request, 'tarjetas/estado_traslados.html', {'form': form})

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+<div> 
+  {% block content %}
+  <h2>Nueva Tarjeta</h2>
+  <form method="POST" class="form-group">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </form>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Obtener la fecha y hora actuales
+      const now = new Date();
+      const formattedDate = now.toISOString().slice(0, 16); // Formato 'YYYY-MM-DDTHH:mm'
+
+      // Establecer el valor en el campo psa_in
+      const psaInField = document.getElementById("id_psa_out");
+      if (psaInField) {
+          psaInField.value = formattedDate;
+      }
+  </script>
+  {% endblock %}
+</div>
+

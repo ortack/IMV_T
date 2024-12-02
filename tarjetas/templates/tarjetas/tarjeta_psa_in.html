@@ -1,28 +1,38 @@
 {% extends "base.html" %}
 
+<div> 
+  {% block content %}
+  <h2>Nueva Tarjeta</h2>
+  <form method="POST" class="form-group">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </form>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Obtener la fecha y hora actuales
+        const now = new Date();
+        const formattedDate = now.toISOString().slice(0, 16); // Formato 'YYYY-MM-DDTHH:mm'
 
-    <div> 
-      {% block content %}
-      <h2>Nueva Tarjeta</h2>
-      <form method="POST" class="form-group">{% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Save</button>
-      </form>
-      <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    // Asigna valores de latitud y longitud a los campos del formulario
-                    document.getElementById("id_latitud").value = position.coords.latitude;
-                    document.getElementById("id_longitud").value = position.coords.longitude;
-                }, function(error) {
-                    console.error("Error obteniendo la ubicación:", error.message);
-                });
-            } else {
-                console.error("Geolocalización no soportada por este navegador.");
-            }
-        });
-    </script>
-      {% endblock %}
-    </div>  
+        // Establecer el valor en el campo psa_in
+        const psaInField = document.getElementById("id_psa_in");
+        if (psaInField) {
+            psaInField.value = formattedDate;
+        }
+
+        // Manejar la geolocalización (ya existente)
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                // Asignar valores de latitud y longitud a los campos del formulario
+                document.getElementById("id_latitud").value = position.coords.latitude;
+                document.getElementById("id_longitud").value = position.coords.longitude;
+            }, function(error) {
+                console.error("Error obteniendo la ubicación:", error.message);
+            });
+        } else {
+            console.error("Geolocalización no soportada por este navegador.");
+        }
+    });
+  </script>
+  {% endblock %}
+</div>
 

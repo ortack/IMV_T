@@ -10,6 +10,7 @@ from django.shortcuts import render
 from tarjetas.models import *
 #from tarjetas.forms import *
 from django.http import JsonResponse
+from django.db.models import Q
 
 def loginPage(request):
     if request.method == "POST":
@@ -50,16 +51,43 @@ def logoutUser(request):
 @login_required(login_url='login') # quitar comentario para que se requiera login en la pagina principal
 def index(request):
     try:
-        evento = Evento.objects.filter(id = request.session['evento_id'])
+        evento = Evento.objects.filter(id=request.session['evento_id'])
         nombre = evento.values()[0]['nombre']
     except:
         return redirect('login')
-    #print(evento.values())
-    
+
     descripcion = evento.values()[0]['descripcion']
     latitud = evento.values()[0]['latitud']
     longitud = evento.values()[0]['longitud']
-    lat = str(latitud).replace(',','.')
-    lon = str(longitud).replace(',','.')
-    tarjetas_count = Tarjeta.objects.filter(evento = request.session['evento_id']).count()
-    return render(request, 'tarjetas/index.html', { 'descripcion':descripcion, 'tarjetas_count':tarjetas_count, 'latitud':lat, 'longitud':lon,})
+    lat = str(latitud).replace(',', '.')
+    lon = str(longitud).replace(',', '.')
+    tarjetas_count = Tarjeta.objects.filter(evento=request.session['evento_id']).count()
+    tarjetas_red = Tarjeta.objects.filter(evento=request.session['evento_id'], triaje='ROJO')
+    tarjetas_verde = Tarjeta.objects.filter(evento=request.session['evento_id'], triaje='VERDE')
+    tarjetas_amarillo = Tarjeta.objects.filter(evento=request.session['evento_id'], triaje='AMARILLO')
+    tarjetas_morado = Tarjeta.objects.filter(evento=request.session['evento_id'], triaje='MORADO')
+    tarjetas_negro= Tarjeta.objects.filter(evento=request.session['evento_id'], triaje='NEGRO')
+    pendiente_hospi = Tarjeta.objects.filter(Q(evento=request.session['evento_id']) | Q(estado_traslado = 'PENDIENTE') | Q(estado_traslado = 'SOLICITADO')).count
+    pendiente_traslado = Tarjeta.objects.filter(Q(evento=request.session['evento_id']) | Q(estado_traslado = 'PENDIENTE') | Q(estado_traslado = 'SOLICITADO') | Q(estado_traslado = 'GESTIONADO')).count
+ 
+    
+    # Crear una lista de coordenadas
+    tarjetas_red_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud} for tarjeta in tarjetas_red]
+    tarjetas_verde_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud} for tarjeta in tarjetas_verde]
+    tarjetas_amarillo_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud} for tarjeta in tarjetas_amarillo]
+    tarjetas_morado_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud} for tarjeta in tarjetas_morado]
+    tarjetas_negro_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud} for tarjeta in tarjetas_negro]
+
+    return render(request, 'tarjetas/index.html', {
+        'descripcion': descripcion,
+        'tarjetas_count': tarjetas_count,
+        'tarjetas_red_coords': tarjetas_red_coords,
+        'tarjetas_verde_coords': tarjetas_verde_coords,
+        'tarjetas_amarillo_coords': tarjetas_amarillo_coords,
+        'tarjetas_morado_coords': tarjetas_morado_coords,
+        'tarjetas_negro_coords': tarjetas_negro_coords,
+        'pendiente_hospi' : pendiente_hospi,
+        'pendiente_traslado' : pendiente_traslado,
+        'latitud': lat,
+        'longitud': lon,
+    })

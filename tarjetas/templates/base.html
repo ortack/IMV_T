@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-    <title>{% trans 'Servicios Preventivos' %}</title>
+    <title>{% trans 'Gestion de IMV' %}</title>
   </head>
 
 <body>
@@ -35,14 +35,8 @@
       <li class="nav-item {% if  request.path == '/tarjetas/roll_2/' %}active bg-danger2{% endif %}">
         <a class="nav-link" aria-current="page" href="/tarjetas/roll_2/">Acceso al PSA</a>
       </li>
-      <li class="nav-item {% if  request.path == '/tarjetas/informe/' %}active bg-danger2{% endif %}">
-        <a class="nav-link" aria-current="page" href="/tarjetas/informe/">Informe</a>
-      </li>
-      <li class="nav-item {% if  request.path == '/tarjetas/ayuda' %}active bg-danger2{% endif %}">
-        <a class="nav-link" aria-current="page" href="/tarjetas/ayuda">Ayuda</a>
-      </li>
-      <li class="nav-item {% if  request.path == '/tarjetas/admin' %}active bg-danger2{% endif %}">
-        <a class="nav-link" aria-current="page" href="/tarjetas/admin">Administracion</a>
+      <li class="nav-item {% if  request.path == '/tarjetas/roll_3/' %}active bg-danger2{% endif %}">
+        <a class="nav-link" aria-current="page" href="/tarjetas/roll_3/">Salida del PSA</a>
       </li>
     </ul>
     <ul class="nav navbar-nav ml-auto">
