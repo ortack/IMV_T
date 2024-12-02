@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+  {% load i18n %}
+  {% load static %}
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <base href="/">
+    <link rel="icon" type="image/x-icon" href="media/logo1.jpg">
+     
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Bootstrap CSS <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/bootstrap.js' %}"></script>-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <title>{% trans 'Servicios Preventivos' %}</title>
+  </head>
+
+<body>
+  <nav class="navbar navbar-expand-lg  navbar-dark bg-primary">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <li class="nav-item {% if  request.path == '#' %}active bg-danger2{% endif %}">
+          <a class="nav-link" aria-current="page" href="#">Mapa</a>
+      </li>
+        <li class="nav-item {% if  request.path == '/tarjetas/roll_1/' %}active bg-danger2{% endif %}">
+        <a class="nav-link" aria-current="page" href="/tarjetas/roll_1/">Nueva Tarjeta</a>
+      </li>
+      <li class="nav-item {% if  request.path == '/tarjetas/tarjetas_list/' %}active bg-danger2{% endif %}">
+        <a class="nav-link" aria-current="page" href="/tarjetas/tarjetas_list/">Listado de Tarjetas</a>
+      </li>
+      <li class="nav-item {% if  request.path == '/tarjetas/roll_2/' %}active bg-danger2{% endif %}">
+        <a class="nav-link" aria-current="page" href="/tarjetas/roll_2/">Acceso al PSA</a>
+      </li>
+      <li class="nav-item {% if  request.path == '/tarjetas/informe/' %}active bg-danger2{% endif %}">
+        <a class="nav-link" aria-current="page" href="/tarjetas/informe/">Informe</a>
+      </li>
+      <li class="nav-item {% if  request.path == '/tarjetas/ayuda' %}active bg-danger2{% endif %}">
+        <a class="nav-link" aria-current="page" href="/tarjetas/ayuda">Ayuda</a>
+      </li>
+      <li class="nav-item {% if  request.path == '/tarjetas/admin' %}active bg-danger2{% endif %}">
+        <a class="nav-link" aria-current="page" href="/tarjetas/admin">Administracion</a>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav ml-auto">
+      <li class="nav-item ">
+        <span class="text-white" >{{ request.session.evento }}</span>
+        </br>
+        <span class="text-white" ><a href="{% url 'logout' %}"style="color:#FFFFFF;" FONT COLOR="white"> {{request.user}} </a>  </span>
+      </li>
+    </ul>
+  </nav>
+  {% block print %}{% endblock print %}
+  {% block content %}{% endblock content %}
+      </body>
+</html>

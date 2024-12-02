@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+    <div>
+        <h1>Total de Tarjetas: {{ tarjetas_count }} </h1>
+    </div> 
+    <table class="table table-striped table-hover">
+        <thead class="table-primary">
+            <tr>
+              <td>Hora</td> 
+              <td>Num tarjeta</td> 
+              <td>Edad</td> 
+              <td>Sexo</td>
+              <td>Triaje</td>
+              <td>Patologia</td>
+              <td>Traslado a </td>
+              <td>Traslado por</td>
+              <td>Estado del traslado</td>
+            </tr>
+        </thead>
+        <tbody>
+              <tr>
+                {% for tarjeta in tarjetas %}
+                <tr>
+                  <td>{{tarjeta.hora_ini}}</td>
+                  <td><a class="nav-link text-info fw-bold" href="/tarjetas/tarjeta_edit/{{ tarjeta.id }}">{{tarjeta.num_t}}</a></td>
+                  <td>{{tarjeta.edad}}</td>
+                  <td>{{tarjeta.sexo}}</td>
+                  <td>{% if tarjeta.triaje == 'VERDE' %}
+                      <span class="badge badge-success">{{tarjeta.triaje}}</span>
+                      {% elif tarjeta.triaje == 'AMARILLO' %}
+                      <span class="badge badge-warning">{{tarjeta.triaje}}</span>
+                      {% elif tarjeta.triaje == 'ROJO' %}
+                        <span class="badge badge-danger">{{tarjeta.triaje}}</span>
+                      {% elif tarjeta.triaje == 'MORADO' %}
+                        <span class="badge badge-primary">{{tarjeta.triaje}}</span>
+                      {% elif tarjeta.triaje == 'NEGRO' %}
+                        <span class="badge badge-dark">{{tarjeta.triaje}}</span>
+                      {% endif %}                   
+                  </td>
+                  <td>{{tarjeta.patologia}}</td>
+                  <td>{{tarjeta.traslado_a}}</td>
+                  <td>{{tarjeta.traslado_por}}</td>
+                  <td>{{tarjeta.estado_traslado}}</td>
+                </tr>
+                {% endfor %}
+              </tr>
+        </tbody>
+    </table>
+    <style>
+    .table td {
+        max-width: 145px; /* Ajusta el valor para el ancho máximo deseado */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    </style>
+
+{% endblock content %}

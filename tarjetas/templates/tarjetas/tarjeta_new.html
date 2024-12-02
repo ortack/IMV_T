@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+
+    <div> 
+      {% block content %}
+      <h2>Nueva Tarjeta</h2>
+      <form method="POST" class="form-group">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Save</button>
+      </form>
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    // Asigna valores de latitud y longitud a los campos del formulario
+                    document.getElementById("id_latitud").value = position.coords.latitude;
+                    document.getElementById("id_longitud").value = position.coords.longitude;
+                }, function(error) {
+                    console.error("Error obteniendo la ubicación:", error.message);
+                });
+            } else {
+                console.error("Geolocalización no soportada por este navegador.");
+            }
+        });
+    </script>
+      {% endblock %}
+    </div>  
+

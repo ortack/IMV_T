@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+      {% block content %}
+	<div class="container h-100">
+		<div class="d-flex justify-content-center h-100">
+			<div class="user_card">
+				<div class="d-flex justify-content-center">
+
+
+					<h3 id="form-title">LOGIN</h3>
+				</div>
+				<div class="d-flex justify-content-center form_container">
+					<form method="POST" action="">
+						{% csrf_token %}
+						<div class="mb-3">
+						  <label for="Usuario" class="form-label">Usuario</label>
+						  <input type="text" name="username" placeholder="Username..." class="form-control">
+						</div>
+						<div class="mb-3">
+						  <label for="Password" class="form-label">Contraseña</label>
+						  <input type="password"name="password" placeholder="Password..." class="form-control">
+						</div>
+						<div class="mb-3">
+							<label for="evento" class="form-label">Evento:</label>
+							<select name="evento" class="form-label" required>
+								<option value="">Seleccione un evento</option>
+								´{% for evento in eventos %}
+									<option value="{{ evento.id }}">{{ evento.nombre }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="mb-3">
+							<label for="roll" class="form-label">roll:</label>
+							<select name="roll" class="form-label">
+								<option value="">----</option>
+								´{% for roll in rolls %}
+									<option value="{{ roll.nombre }}">{{ roll.nombre }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<button type="submit" class="btn btn-primary bg-primary" value="Login">Login</button>
+					  </form>
+
+				</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+		  const eventoSelector = document.querySelector('select[name="evento"]');
+		  const rollSelector = document.querySelector('select[name="roll"]');
+	  
+		  eventoSelector.addEventListener('change', function () {
+			const selectedEventoId = eventoSelector.value;
+			if (selectedEventoId) {
+			  fetch(`/rolls_por_evento/${selectedEventoId}/`)
+				.then(response => response.json())
+				.then(data => {
+				  rollSelector.innerHTML = '<option value="">----</option>';
+				  data.forEach(roll => {
+					const option = document.createElement('option');
+					option.textContent = roll.nombre;
+					rollSelector.appendChild(option);
+				  });
+				});
+			} else {
+			  rollSelector.innerHTML = '<option value="">----</option>';
+			}
+		  });
+		});
+	  </script>
+	  
+{% endblock content%}
+
+ 
