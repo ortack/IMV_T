@@ -2,9 +2,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
-sspp_web/config.py
-myapp/migrations
-sspp_web.sqlite3
+IMV_T/config.py
+tarjetas/migrations
+IMV_T.sqlite3
 logs/
 static/
 # C extensions

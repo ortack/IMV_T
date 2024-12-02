@@ -17,6 +17,7 @@ logger = logging.getLogger(MSG_LOGGER)
 # Create your views here.
 
 #Roll de primer interviente
+#@login_required(login_url='login')
 def roll_1(request):
     if request.method == "POST":
         form = Roll1Form(request.POST.copy())
@@ -33,7 +34,7 @@ def roll_1(request):
     return render(request, 'tarjetas/tarjeta_new.html', {'form': form})
 
 # PSA Entrada
-@login_required(login_url='login')
+#@login_required(login_url='login')
 def roll_2(request):
     if request.method == "POST":
         form = Roll2Form(request.POST)
@@ -61,8 +62,8 @@ def tarjeta_psa_in(request, tarjeta_id):
         form = TarjetaPsaInForm(instance=post)
     return render(request, 'tarjetas/tarjeta_psa_in.html', {'form': form})
 
-
-@login_required(login_url='login')
+# Salida del PSA
+#@login_required(login_url='login')
 def roll_3(request):
     if request.method == "POST":
         form = Roll3Form(request.POST)
