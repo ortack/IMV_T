@@ -1,0 +1,18 @@
+.table td {
+  max-width: 145px; /* Ajusta el valor para el ancho máximo deseado */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.text-green {
+  color: green; /* Cambia el color a verde */
+}
+.text-red {
+  color: red; /* Cambia el color a verde */
+}
+.text-blue {
+  color: blue; /* Cambia el color a verde */
+}
+.text-yellow {
+  color: yellow; /* Cambia el color a verde */
+}

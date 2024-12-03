@@ -12053,5 +12053,17 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+.text-green {
+  color: green; /* Cambia el color a verde */
+}
+.text-red {
+  color: red; /* Cambia el color a verde */
+}
+.text-blue {
+  color: blue; /* Cambia el color a verde */
+}
+.text-yellow {
+  color: yellow; /* Cambia el color a verde */
+}
 
 /*# sourceMappingURL=bootstrap.css.map */

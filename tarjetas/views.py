@@ -1,7 +1,7 @@
 from .models import Tarjeta,Evento
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
-from .forms import Roll1Form, TarjetaPsaInForm, Roll2Form, EstadoTrasladoForm, Roll3Form, TarjetaPsaOutForm
+from .forms import Roll1Form, TarjetaPsaInForm, Roll2Form, EstadoTrasladoForm, Roll3Form, TarjetaPsaOutForm, TarjetaEditForm
 import csv
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -92,6 +92,18 @@ def tarjeta_psa_out(request, tarjeta_id):
         form = TarjetaPsaOutForm(instance=post)
     return render(request, 'tarjetas/tarjeta_psa_out.html', {'form': form})
 
+def tarjeta_edit(request, tarjeta_id):
+    post = get_object_or_404(Tarjeta,id=tarjeta_id)
+    if request.method == "POST":
+        form = TarjetaEditForm(request.POST.copy(), instance=post)
+        if form.is_valid():
+            post = form.save()
+            post.save()
+            return redirect('tarjetas_list', )
+    else:
+        form = TarjetaEditForm(instance=post)
+    return render(request, 'tarjetas/tarjeta_edit.html', {'form': form})
+
 @login_required(login_url='login')
 def roll_4(request):
     return None
@@ -105,7 +117,13 @@ def roll(request):
 def tarjetas_list(request):
     tarjetas = Tarjeta.objects.filter(evento = request.session['evento_id']).order_by('-id')
     tarjetas_count = Tarjeta.objects.filter(evento = request.session['evento_id']).count()
-    return render(request, 'tarjetas/tarjetas_list.html', {'tarjetas': tarjetas,'tarjetas_count': tarjetas_count})  
+    return render(request, 'tarjetas/tarjetas_list.html', {'tarjetas': tarjetas,'tarjetas_count': tarjetas_count}) 
+
+@login_required(login_url='login')
+def tarjetas_list_pendientes(request):
+    tarjetas = Tarjeta.objects.filter(evento=request.session['evento_id']).exclude(estado_traslado__in=['REALIZADO', 'ALTA LUGAR', 'SALIDA_PSA' ]).order_by('-id')
+    tarjetas_count = Tarjeta.objects.filter(evento=request.session['evento_id']).exclude(estado_traslado__in=['REALIZADO', 'ALTA LUGAR', 'SALIDA_PSA' ]).count()
+    return render(request, 'tarjetas/tarjetas_list.html', {'tarjetas': tarjetas,'tarjetas_count': tarjetas_count})   
 
 def estado_traslado(request, tarjeta_id):
     post = get_object_or_404(Tarjeta,id=tarjeta_id)

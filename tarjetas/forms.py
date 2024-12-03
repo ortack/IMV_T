@@ -63,6 +63,33 @@ class TarjetaPsaOutForm(forms.ModelForm):
         # Inicializar el campo psa_in con la fecha y hora actual
         self.fields['psa_out'].initial = now().strftime('%d/%m/%Y %H:%M')
         
+class TarjetaEditForm(forms.ModelForm):
+    class Meta:
+        model = Tarjeta
+        fields = ('__all__')
+        labels = {'num_t': 'Numero de Tarjeta',
+            'traslado_a': 'Se traslada a ',
+            'traslada_por': 'Se traslada por',
+            'psa_in': 'Hora llegada al PSA',
+            'psa_out': 'Hora salida del PSA',
+            'dest_in': 'Hora llegada al hospital',
+            'hora_fin': 'Hora finalizacion',
+            'pos_psa': 'Lugar en el PSA',
+            }
+        widgets = {
+            'psa_in': forms.DateTimeInput(attrs={'type': 'datetime-local'}, format='%d/%m/%Y %H:%M'),
+            'psa_out': forms.DateTimeInput(attrs={'type': 'datetime-local'}, format='%d/%m/%Y %H:%M'),
+            'dest_in': forms.DateTimeInput(attrs={'type': 'datetime-local'}, format='%d/%m/%Y %H:%M'),
+            'hora_fin': forms.DateTimeInput(attrs={'type': 'datetime-local'}, format='%d/%m/%Y %H:%M'),
+            'diagnostico': forms.Textarea(attrs={'rows': 4, 'cols': 100}),  # Long text para diagnóstico
+            'tratamiento': forms.Textarea(attrs={'rows': 4, 'cols': 100}),  # Long text para tratamiento
+            'filiacion': forms.Textarea(attrs={'rows': 2, 'cols': 40}),  # Long text para tratamiento
+        }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Inicializar el campo psa_in con la fecha y hora actual
+        self.fields['psa_out'].initial = now().strftime('%d/%m/%Y %H:%M')
+        
 class EstadoTrasladoForm(forms.ModelForm):
     class Meta:
         model = Tarjeta
