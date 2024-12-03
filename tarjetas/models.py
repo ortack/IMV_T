@@ -3,6 +3,7 @@ from django.utils import timezone
 #from mirage import fields
 import datetime
 from django.utils.timezone import now
+from .cambiar_nombre import cambiar_nombre_imagen
 
 class Evento(models.Model):
     nombre = models.CharField(max_length=100, blank=False, null=False)
@@ -87,6 +88,8 @@ class Tarjeta(models.Model):
     hora_fin = models.DateTimeField(blank=True, null=True)
     pos_psa = models.CharField(max_length=100, blank=True)
     psa = models.ForeignKey(Psa, models.DO_NOTHING, db_column='psa', blank=True, null=True)
+    imagen_file_front = models.FileField(upload_to=cambiar_nombre_imagen,blank=True, null=True)
+    imagen_file_back = models.FileField(upload_to=cambiar_nombre_imagen,blank=True, null=True)
     
     def __str__(self):
         return self.num_t
