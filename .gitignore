@@ -7,6 +7,7 @@ tarjetas/migrations
 IMV_T.sqlite3
 logs/
 staticfiles/
+media/
 # C extensions
 *.so
 
