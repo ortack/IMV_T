@@ -1,0 +1,41 @@
+Para Crear una tarjeta
+[
+	{
+        "evento": "Prueba 1",
+        "num_t": "T2",
+        "edad": "12",
+        "sexo": "HOMBRE",
+        "triaje_ini": "VERDE",
+        "latitud": "3",
+        "longitud": "3"
+    }
+]
+
+Para PsaIn
+[
+	{
+        "id_tarjeta": 12,
+        "edad": "12",
+        "sexo": "HOMBRE",
+        "triaje": "VERDE",
+        "latitud": "3",
+        "longitud": "3",
+        "psa_nombre": "1",
+        "pos_psa": "cama 3",
+        "patologia": "Simulacro"
+    }
+]
+
+Para PsaOut
+[
+	{
+        "id_tarjeta": 12,
+        "triaje": "VERDE",
+        "traslada_a": "Hospital puerta de Hierro",
+        "traslada_por": "Alfa 3",
+        "filiacion": "Pepe perez",
+        "diagnostico": "esta muy malito",
+        "tratamiento": "un poco de cariño",
+        "patologia": "Simulacro"
+    }
+]
