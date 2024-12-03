@@ -7,20 +7,10 @@
 {% endblock %}
 {% block content %}
 <div style="text-align: center;">
-    <h1>{{ descripcion }}, Total Tarjetas: {{ tarjetas_count }}</h1>
+    <h3>Total Tarjetas: {{ tarjetas_count }}, Pendiente de Hospital: {{pendiente_hospi}}, Pendiente de traslado: {{pendiente_traslado}} </h3>
 </div>
 <div class="contenedor">
-  <div class="row">
-    <div class="col-md-3">
-      <div id="tabla1-container" class="table-container">
-        <h3>Pendiente de Hospital: {{pendiente_hospi}}</h3>
-        <h3>Pendiente de traslado: {{pendiente_traslado}}</h3>
-      </div>
-    </div>
-    <div class="col-md-9">
-      <div map="map" id="map" style="width: 100%; height: 800px;"></div>
-    </div>
-  </div>
+  <div map="map" id="map" style="width: 100%; height: 800px;"></div>
 </div>
 <script>
     var latitud = {{ latitud }}; // Latitud del evento
@@ -41,12 +31,14 @@
     var tarjetasAmarilloCoords = {{ tarjetas_amarillo_coords|safe }};
     var tarjetasMoradoCoords = {{ tarjetas_morado_coords|safe }};
     var tarjetasNegroCoords = {{ tarjetas_negro_coords|safe }};
+    var psaCoords = {{ psa_coords|safe }};
+
     tarjetasRedCoords.forEach(function(tarjeta) {
         if (tarjeta.lat && tarjeta.lon) { // Verificar que las coordenadas existan
             L.marker([tarjeta.lat, tarjeta.lon], {
               icon: L.icon({
-                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png', // Ícono rojo
-                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png', // Sombra del marcador
+                iconUrl: '{% static '/img/marker-icon-red.png' %}', // Ícono rojo
+                shadowUrl: '{% static '/img/marker-shadow.png' %}', // Sombra del marcador
                 iconSize: [25, 41], // Tamaño del ícono
                 iconAnchor: [12, 41], // Punto de anclaje
                 popupAnchor: [1, -34], // Punto de anclaje del popup
@@ -55,12 +47,13 @@
             }).addTo(map);
         }
     });
+   // Iterar sobre tarjetas_verdes_coords
   tarjetasVerdeCoords.forEach(function(tarjeta) {
       if (tarjeta.lat && tarjeta.lon) { // Verificar que las coordenadas existan
           L.marker([tarjeta.lat, tarjeta.lon], {
             icon: L.icon({
-              iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png', // Ícono rojo
-              shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png', // Sombra del marcador
+              iconUrl: '{% static '/img/marker-icon-green.png' %}', // Ícono rojo
+              shadowUrl: '{% static '/img/marker-shadow.png' %}', // Sombra del marcador
               iconSize: [25, 41], // Tamaño del ícono
               iconAnchor: [12, 41], // Punto de anclaje
               popupAnchor: [1, -34], // Punto de anclaje del popup
@@ -69,12 +62,13 @@
           }).addTo(map);
       }
   });
+   // Iterar sobre tarjetas_amarillo_coords
   tarjetasAmarilloCoords.forEach(function(tarjeta) {
     if (tarjeta.lat && tarjeta.lon) { // Verificar que las coordenadas existan
         L.marker([tarjeta.lat, tarjeta.lon], {
           icon: L.icon({
-            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png', // Ícono rojo
-            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png', // Sombra del marcador
+            iconUrl: '{% static '/img/marker-icon-yellow.png' %}', // Ícono rojo
+            shadowUrl: '{% static '/img/marker-shadow.png' %}', // Sombra del marcador
             iconSize: [25, 41], // Tamaño del ícono
             iconAnchor: [12, 41], // Punto de anclaje
             popupAnchor: [1, -34], // Punto de anclaje del popup
@@ -83,12 +77,13 @@
         }).addTo(map);
     }
 });
+ // Iterar sobre tarjetas_morado_coords
 tarjetasMoradoCoords.forEach(function(tarjeta) {
   if (tarjeta.lat && tarjeta.lon) { // Verificar que las coordenadas existan
       L.marker([tarjeta.lat, tarjeta.lon], {
         icon: L.icon({
-          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png', // Ícono rojo
-          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png', // Sombra del marcador
+          iconUrl: '{% static '/img/marker-icon-blue.png' %}', // Ícono rojo
+          shadowUrl: '{% static '/img/marker-shadow.png' %}', // Sombra del marcador
           iconSize: [25, 41], // Tamaño del ícono
           iconAnchor: [12, 41], // Punto de anclaje
           popupAnchor: [1, -34], // Punto de anclaje del popup
@@ -97,16 +92,30 @@ tarjetasMoradoCoords.forEach(function(tarjeta) {
       }).addTo(map);
   }
 });
+ // Iterar sobre tarjetas_negro_coords
 tarjetasNegroCoords.forEach(function(tarjeta) {
   if (tarjeta.lat && tarjeta.lon) { // Verificar que las coordenadas existan
       L.marker([tarjeta.lat, tarjeta.lon], {
         icon: L.icon({
-          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-black.png', // Ícono rojo
-          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png', // Sombra del marcador
+          iconUrl: '{% static '/img/marker-icon-black.png' %}', // Ícono rojo
+          shadowUrl: '{% static '/img/marker-shadow.png' %}', // Sombra del marcador
           iconSize: [25, 41], // Tamaño del ícono
           iconAnchor: [12, 41], // Punto de anclaje
           popupAnchor: [1, -34], // Punto de anclaje del popup
           shadowSize: [41, 41] // Tamaño de la sombra
+      })
+      }).addTo(map);
+  }
+});
+ // Iterar sobre psa activos coords
+ psaCoords.forEach(function(psa) {
+  if (psa.lat && psa.lon) { // Verificar que las coordenadas existan
+      L.marker([psa.lat, psa.lon], {
+        icon: L.icon({
+          iconUrl: '{% static '/img/hospital.png' %}', // Ícono rojo
+          iconSize: [40, 40], // Tamaño del ícono
+          iconAnchor: [12, 41], // Punto de anclaje
+
       })
       }).addTo(map);
   }

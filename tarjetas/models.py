@@ -24,7 +24,8 @@ class Psa(models.Model):
     longitud = models.FloatField(blank=False, null=False)
     codigo = models.CharField(max_length=10, blank=False, null=False)
     evento = models.ForeignKey(Evento, models.DO_NOTHING, db_column='evento', blank=True, null=True)
-
+    activo = models.BooleanField(default=True)
+    
     def __str__(self):
         return self.nombre
 
@@ -40,16 +41,6 @@ class Destino(models.Model):
 
     def __str__(self):
         return self.lugar
-
-class Psa(models.Model):
-    lugar = models.CharField(max_length=100)
-    activo = models.BooleanField(default=True)
-    evento = models.ForeignKey(Evento, models.DO_NOTHING, db_column='evento', blank=True, null=True)
-
-    def __str__(self):
-        return self.lugar
-
-
 
 class Tarjeta(models.Model):
     TRIAJE = (

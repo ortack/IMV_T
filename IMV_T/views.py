@@ -55,20 +55,21 @@ def index(request):
         nombre = evento.values()[0]['nombre']
     except:
         return redirect('login')
-
+    evento_id = request.session.get('evento_id')
     descripcion = evento.values()[0]['descripcion']
     latitud = evento.values()[0]['latitud']
     longitud = evento.values()[0]['longitud']
     lat = str(latitud).replace(',', '.')
     lon = str(longitud).replace(',', '.')
     tarjetas_count = Tarjeta.objects.filter(evento=request.session['evento_id']).count()
-    tarjetas_red = Tarjeta.objects.filter(evento=request.session['evento_id'], triaje='ROJO')
-    tarjetas_verde = Tarjeta.objects.filter(evento=request.session['evento_id'], triaje='VERDE')
-    tarjetas_amarillo = Tarjeta.objects.filter(evento=request.session['evento_id'], triaje='AMARILLO')
-    tarjetas_morado = Tarjeta.objects.filter(evento=request.session['evento_id'], triaje='MORADO')
-    tarjetas_negro= Tarjeta.objects.filter(evento=request.session['evento_id'], triaje='NEGRO')
-    pendiente_hospi = Tarjeta.objects.filter(Q(evento=request.session['evento_id']) | Q(estado_traslado = 'PENDIENTE') | Q(estado_traslado = 'SOLICITADO')).count
-    pendiente_traslado = Tarjeta.objects.filter(Q(evento=request.session['evento_id']) | Q(estado_traslado = 'PENDIENTE') | Q(estado_traslado = 'SOLICITADO') | Q(estado_traslado = 'GESTIONADO')).count
+    tarjetas_red = Tarjeta.objects.filter(evento=request.session['evento_id'], triaje='ROJO').exclude(estado_traslado__in=['REALIZADO', 'ALTA LUGAR', 'SALIDA_PSA' ])
+    tarjetas_verde = Tarjeta.objects.filter(evento=request.session['evento_id'], triaje='VERDE').exclude(estado_traslado__in=['REALIZADO', 'ALTA LUGAR', 'SALIDA_PSA' ])
+    tarjetas_amarillo = Tarjeta.objects.filter(evento=request.session['evento_id'], triaje='AMARILLO').exclude(estado_traslado__in=['REALIZADO', 'ALTA LUGAR', 'SALIDA_PSA' ])
+    tarjetas_morado = Tarjeta.objects.filter(evento=request.session['evento_id'], triaje='MORADO').exclude(estado_traslado__in=['REALIZADO', 'ALTA LUGAR', 'SALIDA_PSA' ])
+    tarjetas_negro= Tarjeta.objects.filter(evento=request.session['evento_id'], triaje='NEGRO').exclude(estado_traslado__in=['REALIZADO', 'ALTA LUGAR', 'SALIDA_PSA' ])
+    pendiente_hospi  = Tarjeta.objects.filter(evento_id=evento_id , estado_traslado__in=['PENDIENTE', 'SOLICITADO']).count
+    pendiente_traslado = Tarjeta.objects.filter(evento_id=evento_id).exclude(estado_traslado__in=['REALIZADO', 'ALTA LUGAR', 'SALIDA_PSA' ]).count
+    psa_activo = Psa.objects.filter(activo=True )
  
     
     # Crear una lista de coordenadas
@@ -77,6 +78,7 @@ def index(request):
     tarjetas_amarillo_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud} for tarjeta in tarjetas_amarillo]
     tarjetas_morado_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud} for tarjeta in tarjetas_morado]
     tarjetas_negro_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud} for tarjeta in tarjetas_negro]
+    psa_coords = [{'lat': psa.latitud, 'lon': psa.longitud} for psa in psa_activo]
 
     return render(request, 'tarjetas/index.html', {
         'descripcion': descripcion,
@@ -86,6 +88,7 @@ def index(request):
         'tarjetas_amarillo_coords': tarjetas_amarillo_coords,
         'tarjetas_morado_coords': tarjetas_morado_coords,
         'tarjetas_negro_coords': tarjetas_negro_coords,
+        'psa_coords': psa_coords,
         'pendiente_hospi' : pendiente_hospi,
         'pendiente_traslado' : pendiente_traslado,
         'latitud': lat,

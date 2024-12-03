@@ -6,7 +6,7 @@ IMV_T/config.py
 tarjetas/migrations
 IMV_T.sqlite3
 logs/
-static/
+staticfiles/
 # C extensions
 *.so
 
