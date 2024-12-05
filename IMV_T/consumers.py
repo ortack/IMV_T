@@ -129,7 +129,7 @@ class TableDataOpen(AsyncWebsocketConsumer):
     @database_sync_to_async
     def get_tarjetas(self, evento_id):
         Tarjeta = apps.get_model('tarjetas', 'Tarjeta')
-        tarjetas = Tarjeta.objects.filter(evento=evento_id).select_related('patologia', 'traslada_a', 'psa').order_by('-id')
+        tarjetas = Tarjeta.objects.filter(evento=evento_id).exclude(estado_traslado__in=['REALIZADO', 'ALTA LUGAR', 'SALIDA_PSA' ]).select_related('patologia', 'traslada_a', 'psa').order_by('-id')
 
         tarjetas_list = []
         for tarjeta in tarjetas:

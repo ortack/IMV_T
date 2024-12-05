@@ -145,7 +145,7 @@ def tarjetas_list(request):
 def tarjetas_list_pendientes(request):
     tarjetas = Tarjeta.objects.filter(evento=request.session['evento_id']).exclude(estado_traslado__in=['REALIZADO', 'ALTA LUGAR', 'SALIDA_PSA' ]).order_by('-id')
     tarjetas_count = Tarjeta.objects.filter(evento=request.session['evento_id']).exclude(estado_traslado__in=['REALIZADO', 'ALTA LUGAR', 'SALIDA_PSA' ]).count()
-    return render(request, 'tarjetas/tarjetas_list.html', {'tarjetas': tarjetas,'tarjetas_count': tarjetas_count})   
+    return render(request, 'tarjetas/tarjetas_list_pendientes.html', {'tarjetas': tarjetas,'tarjetas_count': tarjetas_count})   
 
 def estado_traslado(request, tarjeta_id):
     post = get_object_or_404(Tarjeta,id=tarjeta_id)
@@ -156,7 +156,7 @@ def estado_traslado(request, tarjeta_id):
             post.save()
             # para actualizar los datos en tiempo real
             update_tareaface()
-            return redirect('tarjetas_list', )
+            return redirect('tarjetas_list_pendientes', )
     else:
         form = EstadoTrasladoForm(instance=post)
     return render(request, 'tarjetas/estado_traslados.html', {'form': form})
