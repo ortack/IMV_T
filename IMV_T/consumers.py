@@ -55,27 +55,25 @@ class TableData(AsyncWebsocketConsumer):
     @database_sync_to_async
     def get_tarjetas(self, evento_id):
         Tarjeta = apps.get_model('tarjetas', 'Tarjeta')
-        tarjetas = Tarjeta.objects.filter(evento=evento_id).order_by('-id').values('id','num_t', 'hora_ini', 'edad','sexo','triaje','patologia','traslada_a','traslada_por','estado_traslado','psa', 'pos_psa' ) 
+        tarjetas = Tarjeta.objects.filter(evento=evento_id).select_related('patologia', 'traslada_a', 'psa').order_by('-id')
+
+        tarjetas_list = []
         for tarjeta in tarjetas:
-            tarjeta['hora_ini'] = tarjeta['hora_ini'].strftime('%d-%m-%Y %H:%M:%S')
-        #print(tarjetas)
-        tarjetas_list = [
-            {
-                'id':tarjeta['id'],
-                'num_t':tarjeta['num_t'],
-                'hora_ini': tarjeta['hora_ini'],
-                'edad': tarjeta['edad'],
-                'sexo': tarjeta['sexo'],
-                'triaje': tarjeta['triaje'],
-                'patologia': tarjeta['patologia'],
-                'traslada_a': tarjeta['traslada_a'], 
-                'traslada_por': tarjeta['traslada_por'],
-                'psa': tarjeta['psa'],
-                'pos_psa': tarjeta['pos_psa'],
-            }
-            for tarjeta in tarjetas
-        ]
-        #print(tarjetas_list)
+            tarjetas_list.append({
+                'id': tarjeta.id,
+                'num_t': tarjeta.num_t,
+                'hora_ini': tarjeta.hora_ini.strftime('%d-%m-%Y %H:%M:%S') if tarjeta.hora_ini else None,
+                'edad': tarjeta.edad,
+                'sexo': tarjeta.sexo,
+                'triaje': tarjeta.triaje,
+                'patologia': tarjeta.patologia.tipo if tarjeta.patologia else 'Sin Patología',
+                'estado_traslado': tarjeta.estado_traslado,
+                'traslada_a': tarjeta.traslada_a.lugar if tarjeta.traslada_a else 'Destino no asignado',
+                'traslada_por': tarjeta.traslada_por,
+                'psa': tarjeta.psa.id if tarjeta.psa else 'Sin PSA',
+                'pos_psa': tarjeta.pos_psa,
+            })
+
         return tarjetas_list
     
     @database_sync_to_async
@@ -131,27 +129,25 @@ class TableDataOpen(AsyncWebsocketConsumer):
     @database_sync_to_async
     def get_tarjetas(self, evento_id):
         Tarjeta = apps.get_model('tarjetas', 'Tarjeta')
-        tarjetas = Tarjeta.objects.filter(evento=evento_id).order_by('-id').values('id','num_t', 'hora_ini', 'edad','sexo','triaje','patologia','traslada_a','traslada_por','estado_traslado','psa', 'pos_psa' ) 
+        tarjetas = Tarjeta.objects.filter(evento=evento_id).select_related('patologia', 'traslada_a', 'psa').order_by('-id')
+
+        tarjetas_list = []
         for tarjeta in tarjetas:
-            tarjeta['hora_ini'] = tarjeta['hora_ini'].strftime('%d-%m-%Y %H:%M:%S')
-        #print(tarjetas)
-        tarjetas_list = [
-            {
-                'id':tarjeta['id'],
-                'num_t':tarjeta['num_t'],
-                'hora_ini': tarjeta['hora_ini'],
-                'edad': tarjeta['edad'],
-                'sexo': tarjeta['sexo'],
-                'triaje': tarjeta['triaje'],
-                'patologia': tarjeta['patologia'],
-                'traslada_a': tarjeta['traslada_a'], 
-                'traslada_por': tarjeta['traslada_por'],
-                'psa': tarjeta['psa'],
-                'pos_psa': tarjeta['pos_psa'],
-            }
-            for tarjeta in tarjetas
-        ]
-        #print(tarjetas_list)
+            tarjetas_list.append({
+                'id': tarjeta.id,
+                'num_t': tarjeta.num_t,
+                'hora_ini': tarjeta.hora_ini.strftime('%d-%m-%Y %H:%M:%S') if tarjeta.hora_ini else None,
+                'edad': tarjeta.edad,
+                'sexo': tarjeta.sexo,
+                'triaje': tarjeta.triaje,
+                'patologia': tarjeta.patologia.tipo if tarjeta.patologia else 'Sin Patología',
+                'estado_traslado': tarjeta.estado_traslado,
+                'traslada_a': tarjeta.traslada_a.lugar if tarjeta.traslada_a else 'Destino no asignado',
+                'traslada_por': tarjeta.traslada_por,
+                'psa': tarjeta.psa.id if tarjeta.psa else 'Sin PSA',
+                'pos_psa': tarjeta.pos_psa,
+            })
+
         return tarjetas_list
 
     
