@@ -66,11 +66,13 @@
       </table>
     </div>
 {% comment %} Script para el datatable {% endcomment %}
-    <script>
-      $(document).ready(function() {
-          $('#tabla1').DataTable();
-      } );
-  </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#tabla1').DataTable();
+    });
+</script>
   <script>
     //console.log('Hello from main.js');
     // se conecta al websocket
@@ -80,9 +82,9 @@
     socket.onmessage = function(e) {
       var data = JSON.parse(e.data);
       var tarjetas = data.tarjetas;
-      console.log(data);
-      console.log(tarjetas);
-      console.log(data.tarjetas_count_open);
+      //console.log(data);
+      //console.log(tarjetas);
+      //console.log(data.tarjetas_count_open);
       // Actualiza el contador de tarjetas
       var tarjetasCountContainer = document.getElementById("tarjetas-count-container");
       tarjetasCountContainer.innerHTML = `<h1>Total de tarjetas: ${data.tarjetas_count}</h1>`;
