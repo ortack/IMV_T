@@ -1,65 +1,126 @@
 {% extends "base.html" %}
 {% load i18n %}
+
 {% block content %}
-    <div>
-        <h1>Total de Tarjetas: {{ tarjetas_count }} </h1>
+    <div id="tarjetas-count-container">
+      <h1>Total de Tarjetas: {{ tarjetas_count }} </h1>
     </div> 
-    <table class="table table-striped table-hover">
-        <thead class="table-primary">
+    <div id="tabla1-container" class="table-container">
+      <h3>tarjetas abiertas: {{tarjetas_count_open}}</h3>
+      <table id="tabla1" class="table table-striped table-hover">
+          <thead class="table-primary">
             <tr>
-              <td>Hora Entrada sistema</td> 
-              <td>Num tarjeta</td> 
-              <td>Edad</td> 
+              <td>Hora</td>
+              <td>Num de Tarjeta</td>
+              <td>Edad</td>
               <td>Sexo</td>
               <td>Triaje</td>
               <td>Patologia</td>
-              <td>Traslado a </td>
-              <td>Traslado por</td>
-              <td>Estado del traslado</td>
+              <td>Traslada a</td>
+              <td>Traslada por</td>
               <td>PSA</td>
-              <td>Lugar en el PSA</td>
-            </tr>
+              <td>Posicion en el PSA</td>
+          </tr>
+          </thead>
+          <tbody>
+                  {% for tarjeta in tarjetas %}
+                  <tr>
+                    <td>{{tarjeta.hora_ini}}</td>  
+                    <td><a class="nav-link text-info fw-bold" href="tarjetas/tarjeta_edit/{{ tarjeta.id }}">{{tarjeta.num_t}}</a></td>
+                    <td>{{tarjeta.edad}}</td>
+                    <td>{{tarjeta.sexo}}</td>
+                    <td>{{tarjeta.triaje}}</td>
+                    <td>{{tarjeta.patogia}}</td>
+                    <td>{{tarjeta.traslada_a}}</td>
+                    <td>{{tarjeta.traslada_por}}</td>
+                    <td>{{tarjeta.psa}}</td>
+                    <td>{{tarjeta.pas_psa}}</td>
+                  </tr>
+                  {% endfor %}
+          </tbody>
+      </table>
+    </div>
+{% comment %} Script para el datatable {% endcomment %}
+    <script>
+      $(document).ready(function() {
+          $('#tabla1').DataTable();
+      } );
+  </script>
+  <script>
+    //console.log('Hello from main.js');
+    // se conecta al websocket
+    // Si es http usa wss y sino ws
+    var protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+    var socket = new WebSocket(protocol + window.location.host + "/ws/TableData/");
+    socket.onmessage = function(e) {
+      var data = JSON.parse(e.data);
+      var tarjetas = data.tarjetas;
+      console.log(data);
+      console.log(tarjetas);
+      console.log(data.tarjetas_count_open);
+      // Actualiza el contador de tarjetas
+      var tarjetasCountContainer = document.getElementById("tarjetas-count-container");
+      tarjetasCountContainer.innerHTML = `<h1>Total de tarjetas: ${data.tarjetas_count}</h1>`;
+      // Refresca la tabla de las tarjetas
+      var tarjetasTable = document.getElementById("tabla1-container");
+      var newTableHTML = `
+      <div id="tabla1-container" class="table-container">
+        <h3>tarjetas abiertas: ${data.tarjetas_count_open}</h3>
+        <table class="table table-striped table-hover">
+          <thead class="table-primary">
+            <tr>
+              <td>Hora</td>
+              <td>Num de Tarjeta</td>
+              <td>Edad</td>
+              <td>Sexo</td>
+              <td>Triaje</td>
+              <td>Patologia</td>
+              <td>Traslada a</td>
+              <td>Traslada por</td>
+              <td>PSA</td>
+              <td>Posicion en el PSA</td>
+          </tr
+          </thead>
         </thead>
-        <tbody>
-              <tr>
-                {% for tarjeta in tarjetas %}
-                <tr>
-                  <td>{{tarjeta.hora_ini|date:"d/m/Y H:i:s"}}</td>
-                  <td><a class="nav-link text-info fw-bold" href="/tarjetas/tarjeta_edit/{{ tarjeta.id }}">{{tarjeta.num_t}}</a></td>
-                  <td>{{tarjeta.edad}}</td>
-                  <td>{{tarjeta.sexo}}</td>
-                  <td>
-                    {% if tarjeta.triaje == 'VERDE' %}
-                        <span style="background-color: green; color: white;" class="badge">{{tarjeta.triaje}}</span>
-                    {% elif tarjeta.triaje == 'AMARILLO' %}
-                        <span style="background-color: yellow; color: black;" class="badge">{{tarjeta.triaje}}</span>
-                    {% elif tarjeta.triaje == 'ROJO' %}
-                        <span style="background-color: red; color: white;" class="badge">{{tarjeta.triaje}}</span>
-                    {% elif tarjeta.triaje == 'MORADO' %}
-                        <span style="background-color: purple; color: white;" class="badge">{{tarjeta.triaje}}</span>
-                    {% elif tarjeta.triaje == 'NEGRO' %}
-                        <span style="background-color: black; color: white;" class="badge">{{tarjeta.triaje}}</span>
-                    {% endif %}
-                  </td>
-                  <td>{{tarjeta.patologia}}</td>
-                  <td>{{tarjeta.traslada_a}}</td>
-                  <td>{{tarjeta.traslada_por}}</td>
-                  {% comment %}<td><a class="nav-link text-info fw-bold" href="/tarjetas/estado_traslado/{{ tarjeta.id }}">{{tarjeta.estado_traslado}}</a></td> {% endcomment %}
-                   <td>{% if tarjeta.estado_traslado == 'GESTIONADO' %}
-                      <a style="background-color: blue; color: white;" class="badge" href="/tarjetas/estado_traslado/{{ tarjeta.id }}">{{tarjeta.estado_traslado}}</a>
-                    {% elif tarjeta.estado_traslado == 'SOLICITADO' %}
-                      <a style="background-color: yellow; color: black;" class="badge" href="/tarjetas/estado_traslado/{{ tarjeta.id }}">{{tarjeta.estado_traslado}}</a>
-                    {% elif tarjeta.estado_traslado == 'PENDIENTE' %}
-                      <a style="background-color: red; color: white;" class="badge" href="/tarjetas/estado_traslado/{{ tarjeta.id }}">{{tarjeta.estado_traslado}}</a>
-                    {% else  %}
-                      <a style="background-color: green; color: black;" class="badge" href="/tarjetas/estado_traslado/{{ tarjeta.id }}">{{tarjeta.estado_traslado}}</a>
-                    {% endif %}
-                </td> 
-                <td>{{tarjeta.psa}}</td>
-                <td>{{tarjeta.pos_psa}}</td>
-                </tr>
-                {% endfor %}
-              </tr>
-        </tbody>
-    </table>
-{% endblock content %}
+          <tbody>
+                `;
+  
+  for (var i = 0; i < data.tarjetas.length; i++) {
+      var tarjeta = data.tarjetas[i];
+      console.log(tarjeta)
+      newTableHTML += `
+          <tr>
+            <td>${tarjeta.hora_ini}</td>    
+            <td><a class="nav-link text-info fw-bold" href="/tarjetas/tarjeta_edit/${tarjeta.id}">${tarjeta.num_t}</a></td>
+            <td>${tarjeta.edad}</td>
+            <td>${tarjeta.sexo}</td>
+            <td>${tarjeta.triaje}</td>
+            <td>${tarjeta.patologia}</td>
+            <td>${tarjeta.traslado_a}</td>
+            <td>${tarjeta.traslado_por}</td>
+            <td>${tarjeta.psa}</td>
+            <td>${tarjeta.pos_psa}</td>
+          </tr>
+      `;
+  }
+  newTableHTML += `
+          </tbody>
+        </table>
+      </div>`;
+  
+      // ...
+      tarjetasTable.innerHTML = newTableHTML;
+  }
+
+
+</script>
+
+  <style>
+      .table td {
+          max-width: 145px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+      }
+  </style>
+  {% endblock content %}

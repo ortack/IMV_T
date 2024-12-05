@@ -10,11 +10,25 @@ from django.contrib.auth.decorators import user_passes_test
 from django.db import transaction
 import logging
 from IMV_T.config import MSG_LOGGER
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 
 logger = logging.getLogger(MSG_LOGGER)
 
 # Create your views here.
+
+# Para actualizar el tareaface
+def update_tareaface():
+        # para actualizar los datos en tiempo real
+        #print('entro update tareaface')
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            'actualizacion_grupo',  # Nombre del grupo definido en el WebSocket Consumer
+            {
+                'type': 'updated_data',  # Método para manejar la actualización
+            }
+        )
 
 #Roll de primer interviente
 #@login_required(login_url='login')
@@ -28,6 +42,8 @@ def roll_1(request):
             tarjeta.triaje = tarjeta.triaje_ini
             tarjeta.estado_traslado = "PENDIENTE"
             tarjeta.save()
+            # para actualizar los datos en tiempo real
+            update_tareaface()
             form = Roll1Form()
     else:
         form = Roll1Form()
@@ -57,6 +73,8 @@ def tarjeta_psa_in(request, tarjeta_id):
         if form.is_valid():
             post = form.save()
             post.save()
+            # para actualizar los datos en tiempo real
+            update_tareaface()
             return redirect('roll_2', )
     else:
         form = TarjetaPsaInForm(instance=post)
@@ -87,6 +105,8 @@ def tarjeta_psa_out(request, tarjeta_id):
             post = form.save()
             post.estado_traslado = 'SALIDA_PSA'
             post.save()
+            # para actualizar los datos en tiempo real
+            update_tareaface()
             return redirect('roll_3', )
     else:
         form = TarjetaPsaOutForm(instance=post)
@@ -99,6 +119,8 @@ def tarjeta_edit(request, tarjeta_id):
         if form.is_valid():
             post = form.save()
             post.save()
+            # para actualizar los datos en tiempo real
+            update_tareaface()
             return redirect('tarjetas_list', )
     else:
         form = TarjetaEditForm(instance=post)
@@ -132,6 +154,8 @@ def estado_traslado(request, tarjeta_id):
         if form.is_valid():
             post = form.save()
             post.save()
+            # para actualizar los datos en tiempo real
+            update_tareaface()
             return redirect('tarjetas_list', )
     else:
         form = EstadoTrasladoForm(instance=post)

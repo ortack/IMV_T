@@ -7,15 +7,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1","localhost"]
 
-WSGI_APPLICATION = 'IMV_T.wsgi.application'
-ASGI_APPLICATION = 'IMV_T.asgi.application'
-
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000',]
-CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:8000',]
-#Para drp.ortack.com
-#CSRF_TRUSTED_ORIGINS = ['http://drp.ortack.com','https://drp.ortack.com',]
-#CORS_ORIGIN_WHITELIST = ['http://drp.ortack.com','https://drp.ortack.com',]
-
 
 
 # Database
