@@ -34,92 +34,121 @@
     var psaCoords = {{ psa_coords|safe }};
 
     tarjetasRedCoords.forEach(function(tarjeta) {
-        if (tarjeta.lat && tarjeta.lon) { // Verificar que las coordenadas existan
-            L.marker([tarjeta.lat, tarjeta.lon], {
-              icon: L.icon({
-                iconUrl: '{% static '/img/marker-icon-red.png' %}', // Ícono rojo
-                shadowUrl: '{% static '/img/marker-shadow.png' %}', // Sombra del marcador
-                iconSize: [25, 41], // Tamaño del ícono
-                iconAnchor: [12, 41], // Punto de anclaje
-                popupAnchor: [1, -34], // Punto de anclaje del popup
-                shadowSize: [41, 41] // Tamaño de la sombra
-            })
+        if (tarjeta.lat && tarjeta.lon) {
+            var marker = L.marker([tarjeta.lat, tarjeta.lon], {
+                icon: L.icon({
+                    iconUrl: '{% static "/img/marker-icon-red.png" %}',
+                    shadowUrl: '{% static "/img/marker-shadow.png" %}',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                })
+            }).addTo(map);
+            marker.bindTooltip(
+                "Num tarjeta: " + (tarjeta.num_t || "N/A") +
+                "<br>Edad: " + (tarjeta.edad || "N/A") +
+                "<br>Sexo: " + (tarjeta.sexo || "N/A"),
+                {direction: "top", offset: [0, -10], opacity: 0.9}
+            );
+        }
+    });
+
+    tarjetasVerdeCoords.forEach(function(tarjeta) {
+        if (tarjeta.lat && tarjeta.lon) {
+            var marker = L.marker([tarjeta.lat, tarjeta.lon], {
+                icon: L.icon({
+                    iconUrl: '{% static "/img/marker-icon-green.png" %}',
+                    shadowUrl: '{% static "/img/marker-shadow.png" %}',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                })
+            }).addTo(map);
+            marker.bindTooltip(
+                "Num tarjeta: " + (tarjeta.num_t || "N/A") +
+                "<br>Edad: " + (tarjeta.edad || "N/A") +
+                "<br>Sexo: " + (tarjeta.sexo || "N/A"),
+                {direction: "top", offset: [0, -10], opacity: 0.9}
+            );
+        }
+    });
+
+    tarjetasAmarilloCoords.forEach(function(tarjeta) {
+        if (tarjeta.lat && tarjeta.lon) {
+            var marker = L.marker([tarjeta.lat, tarjeta.lon], {
+                icon: L.icon({
+                    iconUrl: '{% static "/img/marker-icon-yellow.png" %}',
+                    shadowUrl: '{% static "/img/marker-shadow.png" %}',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                })
+            }).addTo(map);
+            marker.bindTooltip(
+                "Num tarjeta: " + (tarjeta.num_t || "N/A") +
+                "<br>Edad: " + (tarjeta.edad || "N/A") +
+                "<br>Sexo: " + (tarjeta.sexo || "N/A"),
+                {direction: "top", offset: [0, -10], opacity: 0.9}
+            );
+        }
+    });
+
+    tarjetasMoradoCoords.forEach(function(tarjeta) {
+        if (tarjeta.lat && tarjeta.lon) {
+            var marker = L.marker([tarjeta.lat, tarjeta.lon], {
+                icon: L.icon({
+                    iconUrl: '{% static "/img/marker-icon-blue.png" %}',
+                    shadowUrl: '{% static "/img/marker-shadow.png" %}',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                })
+            }).addTo(map);
+            marker.bindTooltip(
+                "Num tarjeta: " + (tarjeta.num_t || "N/A") +
+                "<br>Edad: " + (tarjeta.edad || "N/A") +
+                "<br>Sexo: " + (tarjeta.sexo || "N/A"),
+                {direction: "top", offset: [0, -10], opacity: 0.9}
+            );
+        }
+    });
+
+    tarjetasNegroCoords.forEach(function(tarjeta) {
+        if (tarjeta.lat && tarjeta.lon) {
+            var marker = L.marker([tarjeta.lat, tarjeta.lon], {
+                icon: L.icon({
+                    iconUrl: '{% static "/img/marker-icon-black.png" %}',
+                    shadowUrl: '{% static "/img/marker-shadow.png" %}',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                })
+            }).addTo(map);
+            marker.bindTooltip(
+                "Num tarjeta: " + (tarjeta.num_t || "N/A") +
+                "<br>Edad: " + (tarjeta.edad || "N/A") +
+                "<br>Sexo: " + (tarjeta.sexo || "N/A"),
+                {direction: "top", offset: [0, -10], opacity: 0.9}
+            );
+        }
+    });
+
+    psaCoords.forEach(function(psa) {
+        if (psa.lat && psa.lon) {
+            L.marker([psa.lat, psa.lon], {
+                icon: L.icon({
+                    iconUrl: '{% static "/img/hospital.png" %}',
+                    iconSize: [40, 40],
+                    iconAnchor: [12, 41]
+                })
             }).addTo(map);
         }
     });
-   // Iterar sobre tarjetas_verdes_coords
-  tarjetasVerdeCoords.forEach(function(tarjeta) {
-      if (tarjeta.lat && tarjeta.lon) { // Verificar que las coordenadas existan
-          L.marker([tarjeta.lat, tarjeta.lon], {
-            icon: L.icon({
-              iconUrl: '{% static '/img/marker-icon-green.png' %}', // Ícono rojo
-              shadowUrl: '{% static '/img/marker-shadow.png' %}', // Sombra del marcador
-              iconSize: [25, 41], // Tamaño del ícono
-              iconAnchor: [12, 41], // Punto de anclaje
-              popupAnchor: [1, -34], // Punto de anclaje del popup
-              shadowSize: [41, 41] // Tamaño de la sombra
-          })
-          }).addTo(map);
-      }
-  });
-   // Iterar sobre tarjetas_amarillo_coords
-  tarjetasAmarilloCoords.forEach(function(tarjeta) {
-    if (tarjeta.lat && tarjeta.lon) { // Verificar que las coordenadas existan
-        L.marker([tarjeta.lat, tarjeta.lon], {
-          icon: L.icon({
-            iconUrl: '{% static '/img/marker-icon-yellow.png' %}', // Ícono rojo
-            shadowUrl: '{% static '/img/marker-shadow.png' %}', // Sombra del marcador
-            iconSize: [25, 41], // Tamaño del ícono
-            iconAnchor: [12, 41], // Punto de anclaje
-            popupAnchor: [1, -34], // Punto de anclaje del popup
-            shadowSize: [41, 41] // Tamaño de la sombra
-        })
-        }).addTo(map);
-    }
-});
- // Iterar sobre tarjetas_morado_coords
-tarjetasMoradoCoords.forEach(function(tarjeta) {
-  if (tarjeta.lat && tarjeta.lon) { // Verificar que las coordenadas existan
-      L.marker([tarjeta.lat, tarjeta.lon], {
-        icon: L.icon({
-          iconUrl: '{% static '/img/marker-icon-blue.png' %}', // Ícono rojo
-          shadowUrl: '{% static '/img/marker-shadow.png' %}', // Sombra del marcador
-          iconSize: [25, 41], // Tamaño del ícono
-          iconAnchor: [12, 41], // Punto de anclaje
-          popupAnchor: [1, -34], // Punto de anclaje del popup
-          shadowSize: [41, 41] // Tamaño de la sombra
-      })
-      }).addTo(map);
-  }
-});
- // Iterar sobre tarjetas_negro_coords
-tarjetasNegroCoords.forEach(function(tarjeta) {
-  if (tarjeta.lat && tarjeta.lon) { // Verificar que las coordenadas existan
-      L.marker([tarjeta.lat, tarjeta.lon], {
-        icon: L.icon({
-          iconUrl: '{% static '/img/marker-icon-black.png' %}', // Ícono rojo
-          shadowUrl: '{% static '/img/marker-shadow.png' %}', // Sombra del marcador
-          iconSize: [25, 41], // Tamaño del ícono
-          iconAnchor: [12, 41], // Punto de anclaje
-          popupAnchor: [1, -34], // Punto de anclaje del popup
-          shadowSize: [41, 41] // Tamaño de la sombra
-      })
-      }).addTo(map);
-  }
-});
- // Iterar sobre psa activos coords
- psaCoords.forEach(function(psa) {
-  if (psa.lat && psa.lon) { // Verificar que las coordenadas existan
-      L.marker([psa.lat, psa.lon], {
-        icon: L.icon({
-          iconUrl: '{% static '/img/hospital.png' %}', // Ícono rojo
-          iconSize: [40, 40], // Tamaño del ícono
-          iconAnchor: [12, 41], // Punto de anclaje
-
-      })
-      }).addTo(map);
-  }
-});
 
 </script>
 {% endblock %}

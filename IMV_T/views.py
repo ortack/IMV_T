@@ -73,11 +73,11 @@ def index(request):
  
     
     # Crear una lista de coordenadas
-    tarjetas_red_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud} for tarjeta in tarjetas_red]
-    tarjetas_verde_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud} for tarjeta in tarjetas_verde]
-    tarjetas_amarillo_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud} for tarjeta in tarjetas_amarillo]
-    tarjetas_morado_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud} for tarjeta in tarjetas_morado]
-    tarjetas_negro_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud} for tarjeta in tarjetas_negro]
+    tarjetas_red_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud, 'num_t': tarjeta.num_t,'edad': tarjeta.edad if tarjeta.edad is not None else '','sexo': tarjeta.sexo} for tarjeta in tarjetas_red]
+    tarjetas_verde_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud, 'num_t': tarjeta.num_t,'edad': tarjeta.edad if tarjeta.edad is not None else '','sexo': tarjeta.sexo} for tarjeta in tarjetas_verde]
+    tarjetas_amarillo_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud, 'num_t': tarjeta.num_t,'edad': tarjeta.edad if tarjeta.edad is not None else '','sexo': tarjeta.sexo} for tarjeta in tarjetas_amarillo]
+    tarjetas_morado_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud, 'num_t': tarjeta.num_t,'edad': tarjeta.edad if tarjeta.edad is not None else '','sexo': tarjeta.sexo} for tarjeta in tarjetas_morado]
+    tarjetas_negro_coords = [{'lat': tarjeta.latitud, 'lon': tarjeta.longitud, 'num_t': tarjeta.num_t,'edad': tarjeta.edad if tarjeta.edad is not None else ''  ,'sexo': tarjeta.sexo} for tarjeta in tarjetas_negro]
     psa_coords = [{'lat': psa.latitud, 'lon': psa.longitud} for psa in psa_activo]
 
     return render(request, 'tarjetas/index.html', {

@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.db import transaction
 import logging
 from IMV_T.config import MSG_LOGGER
+from datetime import datetime
 
 
 logger = logging.getLogger(MSG_LOGGER)
@@ -51,13 +52,18 @@ def roll_2(request):
     return render(request, 'tarjetas/roll2.html', {'form': form})
 
 def tarjeta_psa_in(request, tarjeta_id):
-    post = get_object_or_404(Tarjeta,id=tarjeta_id)
+    post = get_object_or_404(Tarjeta, id=tarjeta_id)
     if request.method == "POST":
         form = TarjetaPsaInForm(request.POST.copy(), instance=post)
         if form.is_valid():
-            post = form.save()
+            post = form.save(commit=False)
+            # Convierte el valor de psa_in al formato datetime
+            psa_in_str = form.cleaned_data.get('psa_in')
+            if psa_in_str and isinstance(psa_in_str, str):
+                # El valor viene como 'YYYY-MM-DDTHH:MM'
+                post.psa_in = datetime.strptime(psa_in_str, '%Y-%m-%dT%H:%M')
             post.save()
-            return redirect('roll_2', )
+            return redirect('roll_2')
     else:
         form = TarjetaPsaInForm(instance=post)
     return render(request, 'tarjetas/tarjeta_psa_in.html', {'form': form})
