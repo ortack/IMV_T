@@ -28,6 +28,13 @@ def roll_1(request):
             tarjeta.evento = evento
             tarjeta.triaje = tarjeta.triaje_ini
             tarjeta.estado_traslado = "PENDIENTE"
+            # Si longitud está vacía, usar la del evento
+            if not tarjeta.longitud:
+                tarjeta.longitud = evento.longitud
+            # Si latitud está vacía, usar la del evento
+            if not tarjeta.latitud:
+                tarjeta.latitud = evento.latitud
+                
             tarjeta.save()
             form = Roll1Form()
     else:
@@ -56,7 +63,18 @@ def tarjeta_psa_in(request, tarjeta_id):
     if request.method == "POST":
         form = TarjetaPsaInForm(request.POST.copy(), instance=post)
         if form.is_valid():
+            # Guardar los valores originales de latitud y longitud
+            original_latitud = post.latitud
+            original_longitud = post.longitud
+            
             post = form.save(commit=False)
+            
+            # Si los nuevos valores están vacíos, mantener los originales
+            if not post.latitud:
+                post.latitud = original_latitud
+            if not post.longitud:
+                post.longitud = original_longitud
+            
             # Convierte el valor de psa_in al formato datetime
             psa_in_str = form.cleaned_data.get('psa_in')
             if psa_in_str and isinstance(psa_in_str, str):
@@ -90,7 +108,18 @@ def tarjeta_psa_out(request, tarjeta_id):
     if request.method == "POST":
         form = TarjetaPsaOutForm(request.POST.copy(), instance=post)
         if form.is_valid():
-            post = form.save()
+            # Guardar los valores originales de latitud y longitud
+            original_latitud = post.latitud
+            original_longitud = post.longitud
+            
+            post = form.save(commit=False)
+            
+            # Si los nuevos valores están vacíos, mantener los originales
+            if not post.latitud:
+                post.latitud = original_latitud
+            if not post.longitud:
+                post.longitud = original_longitud
+                
             post.estado_traslado = 'SALIDA_PSA'
             post.save()
             return redirect('roll_3', )
